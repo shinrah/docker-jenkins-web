@@ -1,5 +1,5 @@
 FROM ubuntu
-MAINTAINER Apasoft Training "rahoolnew@gmail.com"
+MAINTAINER Apasoft Training "Rahoolnew@gmail.com"
 RUN apt-get update
 RUN apt-get install -y nginx
 ADD web /var/www/html/
