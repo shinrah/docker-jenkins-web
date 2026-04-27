@@ -8,6 +8,12 @@ pipeline {
             }
         }
 
+        stage ('delete the web container') {
+            steps {
+                sh 'docker rm -f web'
+            }
+        }
+
         stage ('run container') {
             steps {
                 sh 'docker run -d --name web1 -p 9090:80 web'
