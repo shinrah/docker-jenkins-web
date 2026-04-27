@@ -10,7 +10,7 @@ pipeline {
 
         stage ('delete the web container') {
             steps {
-                sh 'docker rm -f web'
+                sh 'docker rm -f web1'
             }
         }
 
