@@ -2,7 +2,6 @@ pipeline {
     agent { label 'slave' }
 
     stages {
-
         stage('build the docker image') {
             steps {
                 sh 'docker build -t web .'
@@ -25,14 +24,14 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'docker1',
-                    usernameVariable: 'user',
-                    passwordVariable: 'pass'
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
                 )]) {
-                    sh """
-                    echo \$pass | docker login -u \$user --password-stdin
-                    """
-                    sh 'docker tag web shinrahmonu/web:latest'
-                    sh 'docker push shinrahmonu/web:latest'
+                    sh '''
+                    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                    docker tag web shinrahmonu/web:latest
+                    docker push shinrahmonu/web:latest
+                    '''
                 }
             }
         }
