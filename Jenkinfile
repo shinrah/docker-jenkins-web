@@ -20,14 +20,12 @@ pipeline {
             }
         }
 
-        stage ('login to docker hub') {
-            steps {
-
-                withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'pass', usernameVariable: 'user')]) 
-                sh 'docker login -u $user -p $pass'
-                sh 'docker push shinrahmonu/web:latest'
-                }
-
-            }
+        stage('login to docker hub') {
+    steps {
+        withCredentials([usernamePassword(credentialsId: 'docker', usernameVariable: 'user', passwordVariable: 'pass')]) {
+            sh 'echo $pass | docker login -u $user --password-stdin'
+            sh 'docker tag web shinrahmonu/web:latest'
+            sh 'docker push shinrahmonu/web:latest'
         }
     }
+}
