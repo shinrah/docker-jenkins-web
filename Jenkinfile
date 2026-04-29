@@ -2,49 +2,32 @@ pipeline {
     agent { label 'slave' }
 
     stages {
-
-        stage('Build Docker Image') {
+        stage ('build the docker image') {
             steps {
-                sh 'docker build -t web .'
+                sh 'docker build -t web .' 
             }
         }
 
-        stage('Delete Old Container') {
+        stage ('delete the web container') {
             steps {
-                sh 'docker rm -f web1 || true'
+                sh 'docker rm -f web1'
             }
         }
 
-        stage('Run Container') {
+        stage ('run container') {
             steps {
                 sh 'docker run -d --name web1 -p 9090:80 web'
             }
         }
 
-        stage('Login to Docker Hub') {
+        stage ('login to docker hub') {
             steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'docker',
-                    usernameVariable: 'user',
-                    passwordVariable: 'pass'
-                )]) {
-                    sh '''
-                    echo $pass | docker login -u $user --password-stdin
-                    '''
-                }
-            }
-        }
 
-        stage('Tag Image') {
-            steps {
-                sh 'docker tag web shinrahmonu/web:latest'
-            }
-        }
-
-        stage('Push Image') {
-            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'pass', usernameVariable: 'user')]) 
+                sh 'docker login -u $user -p $pass'
                 sh 'docker push shinrahmonu/web:latest'
+                }
+
             }
         }
     }
-}
